@@ -1,0 +1,29 @@
+evidence_id,supplier_id,claim_type,claim_value,source_type,source_name,evidence_date,confidence,notes
+ev_001,sup_001,iso_certification,ISO 9001 active,certification_database,Mock ISO Registry,2026-02-10,0.95,Active ISO 9001 certification found in certification database.
+ev_002,sup_001,trade_shipment,Shipment to General Motors US,trade_database,Mock Panjiva Export Feed,2026-03-18,0.92,Copper cable shipment to a large US buyer within the last 12 months.
+ev_003,sup_001,compliance,No compliance flags,compliance_database,Mock Compliance Watchlist,2026-04-02,0.90,No sanctions or material compliance concerns found.
+ev_004,sup_002,trade_shipment,Shipment to Ford US,trade_database,Mock ImportGenius Feed,2026-01-25,0.90,Alias record with recent copper cable shipment to large US buyer.
+ev_005,sup_012,website_claim,Fortune 500 cable supplier,company_website,ABC Cable Website,2026-02-28,0.55,Website states supplier serves Fortune 500 industrial buyers.
+ev_006,sup_003,iso_certification,ISO 9001 active,certification_database,Mock ISO Registry,2025-07-12,0.94,Active ISO certificate listed for Delta Wires India.
+ev_007,sup_003,trade_shipment,Shipment to Boeing US,trade_database,Mock Panjiva Export Feed,2024-11-22,0.85,Copper cable shipment to large US buyer, older than requested window.
+ev_008,sup_003,compliance,No compliance flags,compliance_database,Mock Compliance Watchlist,2026-01-15,0.90,No material compliance concerns found.
+ev_009,sup_004,iso_certification,ISO 9001 active claimed,company_website,Shenzhen CopperTech Website,2026-03-01,0.55,ISO certificate claimed on company website only.
+ev_010,sup_004,website_claim,Supplies major US electronics companies,company_website,Shenzhen CopperTech Website,2026-02-10,0.50,Customer evidence is self-claimed and not supported by trade data.
+ev_011,sup_004,compliance,No compliance flags,compliance_database,Mock Compliance Watchlist,2026-01-09,0.86,No material compliance concerns found.
+ev_012,sup_005,iso_certification,ISO 9001 expired,certification_database,Mock ISO Registry,2025-01-15,0.95,ISO certificate expired before current search period.
+ev_013,sup_005,trade_shipment,Shipment to Caterpillar US,trade_database,Mock Panjiva Export Feed,2026-05-11,0.92,Recent copper conductor shipment to large US buyer.
+ev_014,sup_005,compliance,No compliance flags,compliance_database,Mock Compliance Watchlist,2026-03-03,0.90,No material compliance concerns found.
+ev_015,sup_006,iso_certification,ISO 9001 active,certification_database,Mock ISO Registry,2026-01-08,0.94,Active ISO certificate found.
+ev_016,sup_006,trade_shipment,Shipment to Honeywell US,trade_database,Mock ImportGenius Feed,2026-02-14,0.89,Recent copper cable shipment to a large US buyer.
+ev_017,sup_006,compliance,Active customs documentation concern,compliance_database,Mock Compliance Watchlist,2026-04-10,0.90,Compliance database flags unresolved customs documentation concern.
+ev_018,sup_007,trade_shipment,Shipment to Tesla US,trade_database,Mock Panjiva Export Feed,2026-04-19,0.92,Strong recent shipment evidence to large US buyer.
+ev_019,sup_007,compliance,No compliance flags,compliance_database,Mock Compliance Watchlist,2026-02-20,0.90,No material compliance concerns found.
+ev_020,sup_008,iso_certification,ISO 9001 active claimed,company_website,Mekong Wire Website,2026-03-14,0.55,ISO status appears only on supplier website.
+ev_021,sup_008,website_claim,US industrial customer references,company_website,Mekong Wire Website,2026-03-14,0.50,Website lists US customers without shipment evidence.
+ev_022,sup_009,iso_certification,ISO 9001 active,certification_database,Mock ISO Registry,2026-01-12,0.94,Active ISO certificate for fiber optic cable business.
+ev_023,sup_009,trade_shipment,Shipment to Verizon US,trade_database,Mock ImportGenius Feed,2026-02-18,0.90,Recent shipment but product category is fiber optic cable.
+ev_024,sup_010,iso_certification,ISO 9001 active,certification_database,Mock ISO Registry,2025-12-20,0.94,Active ISO certificate found.
+ev_025,sup_010,trade_shipment,Shipment to GE US,trade_database,Mock Panjiva Export Feed,2025-03-22,0.90,Shipment to large US buyer, older than the requested 12 month window.
+ev_026,sup_010,compliance,No compliance flags,compliance_database,Mock Compliance Watchlist,2026-01-30,0.90,No material compliance concerns found.
+ev_027,sup_011,iso_certification,ISO 9001 active,certification_database,Mock ISO Registry,2026-02-05,0.94,Active ISO certificate found but product category is aluminum conductor.
+ev_028,sup_011,trade_shipment,Shipment to US utility distributor,trade_database,Mock ImportGenius Feed,2026-03-05,0.88,Recent shipment but not copper cable evidence.

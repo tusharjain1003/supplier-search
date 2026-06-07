@@ -1,0 +1,12 @@
+alias_id,supplier_id,alias_name,source
+alias_001,sup_001,ABC Cable Vietnam Ltd.,certification_database
+alias_002,sup_001,ABC Cables VN,trade_database
+alias_003,sup_001,ABC Cable Co. Vietnam,trade_database
+alias_004,sup_003,Delta Wires India Pvt Ltd,certification_database
+alias_005,sup_003,Delta Wire India,trade_database
+alias_006,sup_004,Shenzhen CopperTech Co.,company_website
+alias_007,sup_005,Viet Industrial Conductors,trade_database
+alias_008,sup_006,Eastern Cable Mfg India,compliance_database
+alias_009,sup_007,Guangzhou Power Cable Group,trade_database
+alias_010,sup_008,Mekong Wire Systems,company_website
+alias_011,sup_010,Shanghai Copper Cable Export Co.,trade_database

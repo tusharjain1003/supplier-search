@@ -1,0 +1,7 @@
+source_type,reliability_score
+certification_database,0.95
+trade_database,0.90
+compliance_database,0.90
+financial_database,0.85
+company_website,0.55
+generic_web,0.40

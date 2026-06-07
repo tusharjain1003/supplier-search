@@ -1,0 +1,13 @@
+supplier_id,supplier_name,canonical_name,country,website,product_categories,created_at
+sup_001,ABC Cable Vietnam Ltd.,ABC Cable Vietnam,Vietnam,https://abc-cable.vn,"copper cable;industrial cable;power cable",2026-01-05
+sup_002,ABC Cables VN,ABC Cable Vietnam,Vietnam,https://abc-cable.vn,"copper cable;industrial cable",2026-02-14
+sup_003,Delta Wires India Pvt Ltd,Delta Wires India,India,https://deltawires.in,"copper cable;wire harness;industrial cable",2025-09-12
+sup_004,Shenzhen CopperTech Co.,Shenzhen CopperTech,China,https://coppertech.cn,"copper cable;electrical components",2025-11-01
+sup_005,Viet Industrial Conductors,Viet Industrial Conductors,Vietnam,https://vic-conductors.vn,"copper cable;conductors",2025-08-20
+sup_006,Eastern Cable Manufacturing,Eastern Cable Manufacturing,India,https://easterncable.in,"copper cable;power cable",2025-07-17
+sup_007,Guangzhou Power Cable Group,Guangzhou Power Cable Group,China,https://gpcg.cn,"copper cable;power cable;industrial cable",2025-10-03
+sup_008,Mekong Wire Systems,Mekong Wire Systems,Vietnam,https://mekongwire.vn,"copper cable;wire systems",2026-01-22
+sup_009,Lotus Fiber Optics India,Lotus Fiber Optics India,India,https://lotusfiber.in,"fiber optic cable;telecom cable",2025-05-18
+sup_010,Shanghai Copper Cable Export Co.,Shanghai Copper Cable Export,China,https://sh-copper-export.cn,"copper cable;export cable",2025-12-09
+sup_011,Hanoi Aluminum Conductors,Hanoi Aluminum Conductors,Vietnam,https://hanoialuminum.vn,"aluminum conductor;power cable",2025-06-23
+sup_012,ABC Cable Co. Vietnam,ABC Cable Vietnam,Vietnam,https://abc-cable.vn,"copper cable;industrial cable",2026-03-02
