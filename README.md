@@ -329,6 +329,8 @@ PYTHONPATH=backend pytest backend/tests -v
 7. Open the **supplier detail** page via `/suppliers/{supplier_id}` to see all linked aliases and evidence.
 8. Note that **entity resolution is simplified for the prototype** — canonical names are pre-seeded, and the system links aliases via these labels rather than performing unsupervised clustering. Candidate matches across unrelated records are surfaced but never silently merged, and production would require stronger identifiers (tax IDs, registration IDs) and human review.
 
+The screenshots show the default ranking (balanced weights) and an alternate weighting scenario where ISO importance is raised to 70 and buyer evidence is lowered to 5, changing the supplier order.
+
 ![Streamlit UI — default weights](docs/screenshots/01_streamlit_full.png)
 
 ![Streamlit UI — ISO=70, Buyer evidence=5](docs/screenshots/04_streamlit_alt_weights.png)
