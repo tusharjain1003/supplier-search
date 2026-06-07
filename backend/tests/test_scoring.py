@@ -1,6 +1,10 @@
+from datetime import date
+
 from app.data_loader import load_source_reliability, load_supplier_profiles
+from app.models import EvidenceRecord, SupplierProfile, EntityResolution, SupplierRecord
 from app.query_parser import parse_query
-from app.scoring import compute_confidence, compute_match_components, normalize_weights
+from app.ranking import rank_suppliers
+from app.scoring import compute_confidence, compute_freshness, compute_match_components, normalize_weights
 
 
 QUERY = parse_query(
@@ -58,3 +62,122 @@ def test_query_without_iso_or_compliance_does_not_make_them_required():
 
     assert abc["iso_certification"] == 0.5
     assert abc["compliance"] == 0.5
+
+
+def _minimal_profile(name: str, evidence: list) -> SupplierProfile:
+    return SupplierProfile(
+        supplier_id="test_001",
+        canonical_name=name,
+        country="Testland",
+        website="https://test.com",
+        product_categories=["test product"],
+        records=[SupplierRecord("test_001", name, name, "Testland", "https://test.com", ["test product"], date(2026, 1, 1))],
+        aliases=[],
+        evidence=evidence,
+        entity_resolution=EntityResolution(aliases=[], linked_records=[], resolution_confidence=1.0, reason="test"),
+    )
+
+
+def _ev(date_str: str, source_type: str = "certification_database", claim_value: str = "ISO 9001 active") -> EvidenceRecord:
+    parts = [int(x) for x in date_str.split("-")]
+    return EvidenceRecord(
+        evidence_id="ev_test",
+        supplier_id="test_001",
+        claim_type="iso_certification",
+        claim_value=claim_value,
+        source_type=source_type,
+        source_name="Test Source",
+        source_reliability=0.95 if source_type == "certification_database" else 0.55,
+        evidence_date=date(parts[0], parts[1], parts[2]),
+        confidence=0.9,
+        notes="Test evidence",
+    )
+
+
+def test_all_evidence_expired_sets_freshness_to_zero():
+    profile = _minimal_profile("Expired Co.", [
+        _ev("2024-01-15", claim_value="ISO 9001 expired"),
+        _ev("2023-06-01", claim_value="ISO 9001 expired"),
+    ])
+    confidence, components = compute_confidence(profile)
+    freshness = compute_freshness(profile)
+
+    assert components["freshness"] == 0.0
+    assert freshness == 0.0
+    assert components["contradiction"] == 0.0
+
+
+def test_high_confidence_low_match_orders_below_low_confidence_high_match():
+    profiles = load_supplier_profiles()
+    weights = {"iso_certification": 1, "category": 1, "location": 1, "buyer_evidence": 1, "compliance": 1}
+    result = rank_suppliers(profiles, QUERY, weights)
+    rankings = {r["supplier_name"]: {
+        "match_score": r["match_score"],
+        "confidence_score": r["confidence_score"],
+        "final_score": r["final_score"],
+    } for r in result["results"]}
+
+    top = result["results"][0]
+    bottom = result["results"][-1]
+    assert top["final_score"] >= bottom["final_score"]
+
+
+def test_unequal_weights_change_ranking_order():
+    profiles = load_supplier_profiles()
+    weights_iso = {"iso_certification": 100, "category": 1, "location": 1, "buyer_evidence": 1, "compliance": 1}
+    weights_buyer = {"iso_certification": 1, "category": 1, "location": 1, "buyer_evidence": 100, "compliance": 1}
+
+    result_iso = rank_suppliers(profiles, QUERY, weights_iso)
+    result_buyer = rank_suppliers(profiles, QUERY, weights_buyer)
+    names_iso = [r["supplier_name"] for r in result_iso["results"]]
+    names_buyer = [r["supplier_name"] for r in result_buyer["results"]]
+
+    assert names_iso != names_buyer, "Ranking should differ when weights are skewed"
+
+
+def test_no_results_when_no_profiles_returns_empty():
+    from app.ranking import rank_suppliers
+    from app.query_parser import ParsedQuery
+
+    empty_query = ParsedQuery(category=None, countries=[], requires_iso=False, buyer_type=None, shipment_window_months=None, compliance_required=False, raw_query="")
+    result = rank_suppliers([], empty_query, {})
+    assert result["results"] == []
+
+
+def test_supplier_no_evidence_gets_low_confidence_floor():
+    profile = _minimal_profile("No Evidence Co.", [])
+    confidence, components = compute_confidence(profile)
+
+    assert confidence == 0.2
+    assert components["contradiction"] == 0.5
+
+
+def test_expired_iso_returns_floor_iso_score():
+    profile = _minimal_profile("Expired ISO Co.", [
+        _ev("2024-01-15", claim_value="ISO 9001 expired"),
+    ])
+    components = compute_match_components(profile, QUERY)
+
+    assert components["iso_certification"] == 0.2
+
+
+def test_contradiction_drops_when_expired_and_active_coexist():
+    profile = _minimal_profile("Mixed Co.", [
+        _ev("2024-01-15", claim_value="ISO 9001 expired"),
+        _ev("2026-03-01", claim_value="ISO 9001 active"),
+    ])
+    _, components = compute_confidence(profile)
+
+    assert components["contradiction"] == 0.0
+
+
+def test_three_or_more_source_types_maximises_cross_source():
+    ev1 = _ev("2026-01-01", source_type="certification_database", claim_value="ISO 9001 active")
+    ev2 = _ev("2026-01-01", source_type="trade_database", claim_value="Shipment to Buyer US")
+    ev2.claim_type = "trade_shipment"
+    ev3 = _ev("2026-01-01", source_type="compliance_database", claim_value="No compliance flags")
+    ev3.claim_type = "compliance"
+    profile = _minimal_profile("Triple Source Co.", [ev1, ev2, ev3])
+    _, components = compute_confidence(profile)
+
+    assert components["cross_source_confirmation"] == 1.0
