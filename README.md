@@ -13,6 +13,8 @@ Procurement teams searching for suppliers face three challenges:
 
 This prototype demonstrates a clean separation between **business relevance** (does this supplier match what I asked for?) and **evidence confidence** (how much should I trust this claim?), with fully transparent, explainable rankings.
 
+> **No LLM is used for ranking or trust decisions.** Query parsing, entity resolution, scoring, ranking, compliance handling, and explanation generation are all deterministic and auditable. An LLM could optionally be added for richer natural language parsing, but the core trust system would remain deterministic.
+
 ---
 
 ## Architecture
@@ -325,6 +327,7 @@ PYTHONPATH=backend pytest backend/tests -v
 5. Click on each supplier to inspect **evidence records**, **source reliability**, **entity resolution aliases**, and **weaknesses**.
 6. Adjust the **weight sliders** — increase "ISO certification" to 60 and re-run. Watch Guangzhou Power Cable Group (missing ISO) drop in rank.
 7. Open the **supplier detail** page via `/suppliers/{supplier_id}` to see all linked aliases and evidence.
+8. Note that **entity resolution is simplified for the prototype** — canonical names are pre-seeded, and the system links aliases via these labels rather than performing unsupervised clustering. Candidate matches across unrelated records are surfaced but never silently merged, and production would require stronger identifiers (tax IDs, registration IDs) and human review.
 
 ---
 
@@ -336,7 +339,7 @@ PYTHONPATH=backend pytest backend/tests -v
 | **Confidence separated from relevance** | A supplier can be a perfect product match but have weak evidence (website-only claims). The two scores never mix. |
 | **Evidence stored with provenance** | Every claim includes `source_type`, `source_reliability`, `evidence_date`, and `notes`. No flat `iso_certified: true` fields. |
 | **Source reliability in one file** | `source_reliability.csv` is the single source of truth for trust scores, loaded and applied during evidence ingestion. |
-| **Entity resolution is conservative** | Duplicates are linked by canonical name in the CSV, not auto-merged by the algorithm. Candidate matches are surfaced but not silently merged. |
+| **Entity resolution is simplified** | Canonical names are pre-seeded in the CSV for the prototype; the system links aliases via these labels and surfaces candidate matches across unrelated records but never silently merges. Production would require tax IDs, registration IDs, and human review for medium-confidence merges. |
 | **No LLM required** | Query parsing uses regex patterns. LLMs could be added for richer parsing but never for ranking or trust decisions. |
 
 ---

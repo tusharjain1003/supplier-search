@@ -47,6 +47,8 @@ confidence_score =
 
 Official certification, trade, and compliance databases are more reliable than company websites. Recent evidence scores higher than stale evidence. Expired ISO records and active compliance concerns reduce trust.
 
+These weights are hand-tuned prototype defaults, not learned truth. In production they should be configurable by source type and industry segment, and could be tuned from human review feedback and buyer preference pilots.
+
 ## LLM vs Deterministic Logic
 
 This prototype does not need an LLM. An LLM could be added only for natural language query parsing and optional explanation drafting, with Pydantic validation and deterministic fallback. Ranking, confidence scoring, compliance decisions, ISO validity, shipment freshness, and entity merge decisions remain deterministic.

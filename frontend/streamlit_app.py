@@ -86,6 +86,11 @@ for result in ranked["results"][:8]:
                 "linked_records": profile.entity_resolution.linked_records,
                 "resolution_confidence": profile.entity_resolution.resolution_confidence,
                 "reason": profile.entity_resolution.reason,
+                "candidate_matches": (
+                    profile.entity_resolution.candidate_matches
+                    if profile.entity_resolution.candidate_matches
+                    else "None — all known aliases are linked via canonical name"
+                ),
             }
         )
         st.markdown("Evidence records")
