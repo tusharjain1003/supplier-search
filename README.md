@@ -167,16 +167,23 @@ confidence = 0.40 × source_reliability
            + 0.15 × contradiction_penalty
 ```
 
-- **Source reliability**: certification databases (0.95), trade databases (0.90), compliance databases (0.90), financial databases (0.85), company websites (0.55), generic web (0.40).
-- **Cross-source confirmation**: 1.0 if 3+ independent sources, 0.7 if 2 sources, 0.4 if 1 trusted source, 0.2 if website-only.
-- **Freshness**: 1.0 if ≤12 months, 0.7 if ≤24 months, 0.4 if older, 0.0 if expired.
-- **Contradiction**: 1.0 if no contradictions, 0.5 if missing evidence, 0.0 if contradictory evidence.
+- **Source reliability (40%)**: Self-claimed evidence — a supplier's own website asserting ISO certification — is the most common failure mode in supplier data, so registry-based claims dominate this weight.
+- **Cross-source confirmation (25%)**: Independent corroboration across source types (registry + trade + compliance) materially raises trust; website-only profiles score low.
+- **Freshness (20%)**: Stale evidence degrades trust — a 3-year-old shipment record is nearly meaningless for procurement decisions.
+- **Contradiction (15%)**: Acts as a hard penalty floor. Expired ISO certificates or active compliance flags are rare but decisive when present.
+
+Source reliability tiers: certification databases (0.95), trade databases (0.90), compliance databases (0.90), financial databases (0.85), company websites (0.55), generic web (0.40).  
+Cross-source: 1.0 if 3+ independent sources, 0.7 if 2 sources, 0.4 if 1 trusted source, 0.2 if website-only.  
+Freshness: 1.0 if ≤12 months, 0.7 if ≤24 months, 0.4 if older, 0.0 if expired.  
+Contradiction: 1.0 if no contradictions, 0.5 if missing evidence, 0.0 if contradictory evidence.
 
 ### Final Score
 
 ```text
 final_score = 0.65 × weighted_match + 0.25 × confidence + 0.10 × freshness_modifier
 ```
+
+Freshness appears in two places intentionally. The **confidence-internal** freshness (0.20 weight) is a general trust signal — it measures whether all evidence across the profile is recent. The **standalone** freshness modifier (0.10) is a procurement-fit signal that applies only to key evidence (ISO, shipment, compliance) and directly affects rank order. This prevents a supplier with uniformly stale but internally-consistent evidence from ranking indistinguishably from one with fresh evidence.
 
 Scores are normalized to a 0–100 display scale. The separation between match and confidence means a supplier can be **highly relevant but weakly verified** (good product fit, website-only evidence) or **highly verified but less relevant**.
 
